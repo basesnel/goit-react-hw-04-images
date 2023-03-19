@@ -17,6 +17,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <Searchbar qwe={this.handleSearchSubmit} />
+
+        <ImageGallery imageToQuery={this.state.imageToSearch} />
+
+        {/* <ToastContainer autoClose="3000" /> */}
         <ToastContainer
           position="top-right"
           autoClose={1500}
@@ -29,12 +34,6 @@ class App extends React.Component {
           pauseOnHover
           limit={1}
         />
-
-        <Searchbar qwe={this.handleSearchSubmit} />
-
-        <ImageGallery imageToQuery={this.state.imageToSearch} />
-
-        {/* <ToastContainer autoClose="3000" /> */}
       </div>
     );
   }

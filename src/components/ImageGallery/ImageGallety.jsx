@@ -106,10 +106,15 @@ class ImageGallery extends Component {
               // console.log('These are all search results');
               this.setState({ allSearchRes: true });
             }
-            window.scrollTo({
-              top: 1000,
-              behavior: 'smooth',
-            });
+
+            // const { height: galleryBottom } = document
+            //   .querySelector('.ImageGallery')
+            //   .getBoundingClientRect();
+
+            // window.scrollBy({
+            //   top: galleryBottom - window.pageYOffset,
+            //   behavior: 'smooth',
+            // });
           })
           .catch(error => this.setState({ error, status: 'rejected' }))
           .finally(this.setState({ pending: false }));
