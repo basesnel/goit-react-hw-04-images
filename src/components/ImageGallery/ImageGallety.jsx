@@ -42,12 +42,10 @@ class ImageGallery extends Component {
     const prevSearch = prevProps.imageToQuery;
     const nextSearch = this.props.imageToQuery;
     const prevPage = prevState.page;
-    const currentPage = this.state.page;
+    let currentPage = this.state.page;
     const perPage = 12;
 
     let totalHits = 0;
-
-    // console.log(prevPage, currentPage);
 
     if (prevSearch !== nextSearch || prevPage !== currentPage) {
       this.setState({ pending: true });
@@ -56,7 +54,12 @@ class ImageGallery extends Component {
 
       if (prevSearch !== nextSearch) {
         this.setState({ images: [], page: 1 });
+        currentPage = 1;
       }
+
+      console.log(
+        `this.state.page=${this.state.page}, currentPage=${currentPage}, prevPage=${prevPage}`
+      );
 
       if (currentPage === 1) {
         this.setState({ status: 'pending' });
@@ -94,12 +97,17 @@ class ImageGallery extends Component {
             return imagesCollection;
           })
           .then(data => {
-            this.setState(prevState => {
-              return {
-                images: [...prevState.images, ...data],
-              };
-            });
-            this.setState({ status: 'resolved' });
+            if (currentPage === 1) {
+              this.setState({ images: [...data], status: 'resolved' });
+            } else {
+              this.setState(prevState => {
+                return {
+                  images: [...prevState.images, ...data],
+                  status: 'resolved',
+                };
+              });
+            }
+            // this.setState({ status: 'resolved' });
 
             // console.log(totalHits, this.state.images.length + data.length);
             if (totalHits === this.state.images.length + data.length) {
