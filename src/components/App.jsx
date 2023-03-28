@@ -18,6 +18,8 @@ export default function App() {
   const [idle, setIdle] = useState(true);
   const [pending, setPending] = useState(false);
   const [allSearchRes, setAllSearchRes] = useState(false);
+  const [errorStatus, serErrorStatus] = useState(false);
+  const [error, setError] = useState(null);
   // const [status, setStatus] = useState('idle');
 
   const handleSearchSubmit = imageToSearch => {
@@ -34,6 +36,7 @@ export default function App() {
 
     let totalHits;
 
+    serErrorStatus(false);
     setAllSearchRes(false);
     setPending(true);
     // setStatus('pending')
@@ -44,7 +47,7 @@ export default function App() {
         .then(data => {
           totalHits = data.totalHits;
           if (data.total === 0) {
-            setIdle(true);
+            // setIdle(true);
             return Promise.reject(
               new Error(`Sorry, there are no images for: ${imageToSearch}`)
             );
@@ -78,7 +81,8 @@ export default function App() {
           }
         })
         .catch(error => {
-          setIdle(true);
+          setError(error);
+          serErrorStatus(true);
           toast.error(error.message, {
             theme: 'colored',
             toastId: 'badRequest',
@@ -104,6 +108,10 @@ export default function App() {
         </section>
       ) : pending ? (
         <Loader searchQuery={imageToSearch} />
+      ) : errorStatus ? (
+        <section className="Warning">
+          <p>{error.message}</p>
+        </section>
       ) : allSearchRes ? (
         <section className="Info">
           <p>These are all search results.</p>
